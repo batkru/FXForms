@@ -3139,7 +3139,22 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     
     [self updateSegmentedControlOptions];
     
-    NSUInteger index = self.field.value? [self.field.options indexOfObject:self.field.value]: NSNotFound;
+    NSUInteger index = NSNotFound;
+    
+    if ([self.field.type isEqualToString:FXFormFieldTypeNumber])
+    {
+        index = [self.field.value integerValue];
+    }
+    else if ([self.field.type isEqualToString:FXFormFieldTypeInteger])
+    {
+        index = [self.field.value integerValue];
+    }
+    else
+    {
+        index = self.field.value? [self.field.options indexOfObject:self.field.value]: NSNotFound;
+    }
+    
+    
     if (self.field.placeholder)
     {
         index = (index == NSNotFound)? 0: index + 1;
@@ -3150,6 +3165,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     }
     else
     {
+        
         [self.segmentedControl setSelectedSegmentIndex:index];
     }
     
