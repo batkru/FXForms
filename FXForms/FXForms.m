@@ -3189,7 +3189,32 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
     {
         value = self.field.options[selectedSegmentIndex - (self.field.placeholder? 1: 0)];
     }
-    self.field.value = value;
+    int counter = 0;
+    for (id option in self.field.options)
+    {
+        NSString *valueAsString =[self.field valueDescription:option];
+        if([value isEqualToString:valueAsString]){
+            break;
+        }
+        counter++;
+    }
+    
+    if ([self.field.type isEqualToString:FXFormFieldTypeNumber])
+    {
+        self.field.value = @(counter);
+    }
+    else if ([self.field.type isEqualToString:FXFormFieldTypeInteger])
+    {
+        self.field.value = @(counter);
+    }
+    else if ([self.field.valueClass isSubclassOfClass:[NSURL class]])
+    {
+        self.field.value = [self.field.valueClass URLWithString:value];
+    }
+    else
+    {
+        self.field.value = value;
+    }
     
     if (self.field.action) self.field.action(self);
 }
